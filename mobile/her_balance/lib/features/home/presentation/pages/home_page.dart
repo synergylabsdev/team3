@@ -15,6 +15,7 @@ import '../../../inspirational_content/data/repositories/inspirational_content_r
 import '../../../inspirational_content/domain/models/inspirational_content.dart';
 import '../../../meal_planning/data/repositories/meal_plan_repository.dart';
 import '../../../meal_planning/domain/models/meal_plan.dart';
+import '../../../nutrition/presentation/pages/recipe_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -684,7 +685,18 @@ class _HomePageState extends State<HomePage> {
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
-                                            onTap: () {},
+                                            onTap: _todayBreakfast?.recipeId != null
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => RecipeDetailPage(
+                                                          recipeId: _todayBreakfast!.recipeId,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                : null,
                                             borderRadius: BorderRadius.circular(
                                               16,
                                             ),
