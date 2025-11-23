@@ -362,26 +362,51 @@ class _NutritionOverviewTabState extends State<NutritionOverviewTab> {
                 const SizedBox(height: 8),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: isLogged
-                        ? null
-                        : () => _logMeal(meal, mealPlanId: mealPlanId),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isLogged
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isLogged
                           ? AppTheme.inactiveColor
                           : AppTheme.primaryColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isLogged
+                            ? AppTheme.inactiveColor
+                            : AppTheme.primaryColor,
+                        width: 1,
                       ),
-                      disabledBackgroundColor: AppTheme.inactiveColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF0E1829).withOpacity(0.05),
+                          offset: const Offset(0, 1),
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                        ),
+                      ],
                     ),
-                    child: Text(
-                      isLogged ? 'Logged' : 'Log Meal',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: isLogged
+                            ? null
+                            : () => _logMeal(meal, mealPlanId: mealPlanId),
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          alignment: Alignment.center,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              isLogged ? 'Logged' : 'Log Meal',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

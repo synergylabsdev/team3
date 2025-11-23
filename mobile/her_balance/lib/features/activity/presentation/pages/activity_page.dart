@@ -286,8 +286,8 @@ class _ActivityPageState extends State<ActivityPage> {
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
+                  children: [
+                    Icon(
                                 Icons.directions_walk,
                                 color: AppTheme.primaryColor,
                                 size: 32,
@@ -328,62 +328,110 @@ class _ActivityPageState extends State<ActivityPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => LogStepsModal(
-                                  currentSteps: _currentSteps,
-                                  onConfirm: _logSteps,
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.primaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryColor,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: AppTheme.primaryColor,
+                                width: 1,
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0E1829).withOpacity(0.05),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 2,
+                                  spreadRadius: 0,
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              'Log Steps',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => LogStepsModal(
+                                      currentSteps: _currentSteps,
+                                      onConfirm: _logSteps,
+                                    ),
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(16),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 48,
+                                  alignment: Alignment.center,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      'Log Steps',
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => EditGoalModal(
-                                  currentGoal: _dailyStepGoal,
-                                  onSave: _updateStepGoal,
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFA1B69C),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFA1B69C),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: const Color(0xFFA1B69C),
+                                width: 1,
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0E1829).withOpacity(0.05),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 2,
+                                  spreadRadius: 0,
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              'Edit Goal',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => EditGoalModal(
+                                      currentGoal: _dailyStepGoal,
+                                      onSave: _updateStepGoal,
+                                    ),
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(16),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 48,
+                                  alignment: Alignment.center,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      'Edit Goal',
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -407,26 +455,58 @@ class _ActivityPageState extends State<ActivityPage> {
                       color: AppTheme.textPrimary,
                     ),
                   ),
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditWorkoutPlanPage(),
-                        ),
-                      ).then((_) => _loadData());
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      size: 16,
-                      color: AppTheme.primaryColor,
-                    ),
-                    label: Text(
-                      'Edit Plan',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
                         color: AppTheme.primaryColor,
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF0E1829).withOpacity(0.05),
+                          offset: const Offset(0, 1),
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditWorkoutPlanPage(),
+                            ),
+                          ).then((_) => _loadData());
+                        },
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.edit, size: 16, color: AppTheme.primaryColor),
+                              const SizedBox(width: 8),
+                              Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  'Edit Plan',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppTheme.primaryColor,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -570,13 +650,13 @@ class _ActivityPageState extends State<ActivityPage> {
                           size: 16,
                         ),
                         const SizedBox(width: 4),
-                        Text(
+                    Text(
                           workout.activity ?? 'Activity',
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.textPrimary,
-                          ),
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textPrimary,
+                      ),
                         ),
                       ],
                     ),
@@ -597,9 +677,9 @@ class _ActivityPageState extends State<ActivityPage> {
                         color: AppTheme.textSecondary,
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
-            ),
             // Completion checkbox
             GestureDetector(
               onTap: () => _toggleWorkoutCompleted(workout),

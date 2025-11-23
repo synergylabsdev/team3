@@ -307,57 +307,111 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await LogSymptomsPage.show(
-                            context,
-                            cyclePhase: cyclePhase,
-                          );
-                          // Reload data after bottom sheet closes
-                          if (mounted) {
-                            _loadData();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: cyclePhase.color,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: cyclePhase.color,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: cyclePhase.color,
+                            width: 1,
                           ),
-                          alignment: Alignment.center,
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0E1829).withOpacity(0.05),
+                              offset: const Offset(0, 1),
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          'Log Symptoms',
-                          textAlign: TextAlign.center,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              await LogSymptomsPage.show(
+                                context,
+                                cyclePhase: cyclePhase,
+                              );
+                              // Reload data after bottom sheet closes
+                              if (mounted) {
+                                _loadData();
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              height: 48,
+                              alignment: Alignment.center,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  'Log Symptoms',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          PeriodModal.show(
-                            context,
-                            isStartPeriod: !_hasActivePeriod,
-                            onSaved: _loadData,
-                            cyclePhase: cyclePhase,
-                          );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: cyclePhase.color,
-                          side: BorderSide(color: cyclePhase.color, width: 1),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: cyclePhase.color,
+                            width: 1,
                           ),
-                          alignment: Alignment.center,
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0E1829).withOpacity(0.05),
+                              offset: const Offset(0, 1),
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          _hasActivePeriod
-                              ? 'My Period Ended'
-                              : 'My Period Started',
-                          textAlign: TextAlign.center,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              PeriodModal.show(
+                                context,
+                                isStartPeriod: !_hasActivePeriod,
+                                onSaved: _loadData,
+                                cyclePhase: cyclePhase,
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              height: 48,
+                              alignment: Alignment.center,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  _hasActivePeriod
+                                      ? 'My Period Ended'
+                                      : 'My Period Started',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: cyclePhase.color,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
