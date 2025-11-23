@@ -205,8 +205,8 @@ class _ActivityPageState extends State<ActivityPage> {
                     // Leaf icon
                     Image.asset(
                       'assets/leaf.png',
-                      width: 32,
-                      height: 32,
+                      width: 56,
+                      height: 56,
                       color: AppTheme.primaryColor,
                     ),
                     const SizedBox(height: 8),
