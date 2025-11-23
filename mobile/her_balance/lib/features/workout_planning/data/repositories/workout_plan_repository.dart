@@ -162,5 +162,37 @@ class WorkoutPlanRepository {
       rethrow;
     }
   }
+
+  /// Get average weekly workouts (completed workouts per week) from last 30 days
+  Future<int> getAverageWeeklyWorkouts() async {
+    final userId = SupabaseClient.auth.currentUser?.id;
+    if (userId == null) return 0;
+
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    final startStr = thirtyDaysAgo.toIso8601String().split('T')[0];
+
+    try {
+      final response = await SupabaseClient.from('workout_plans')
+          .select('planned_date, is_completed, is_rest_day')
+          .eq('user_id', userId)
+          .gte('planned_date', startStr)
+          .eq('is_completed', true)
+          .eq('is_rest_day', false);
+
+      if (response.isEmpty) return 0;
+
+      // Count total completed workout days
+      final completedWorkoutDays = response.length;
+
+      // Calculate average: total workout days / number of weeks in 30 days
+      final numberOfWeeks = 30 / 7;
+      final avgWeeklyWorkouts = (completedWorkoutDays / numberOfWeeks).round();
+
+      return avgWeeklyWorkouts;
+    } catch (e) {
+      print('Error fetching average weekly workouts: $e');
+      return 0;
+    }
+  }
 }
 

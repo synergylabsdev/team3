@@ -53,7 +53,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     final user = SupabaseClient.auth.currentUser;
     
     if (user != null) {
-      return const MainNavigationPage();
+      return MainNavigationPage(key: MainNavigationPage.navigatorKey);
     } else {
       return const LoginPage();
     }

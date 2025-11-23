@@ -5,9 +5,8 @@ import '../../../../../core/enums/cycle_phase.dart';
 import '../../../../../core/utils/cycle_calculator.dart';
 import '../../../profile/data/repositories/profile_repository.dart';
 import '../../../profile/domain/models/profile.dart';
-// TODO: Uncomment when implementing monthly data fetching
-// import '../../../cycle/data/repositories/cycle_repository.dart';
-// import '../../../daily_logs/data/repositories/daily_log_repository.dart';
+import '../../../daily_logs/data/repositories/daily_log_repository.dart';
+import '../../../workout_planning/data/repositories/workout_plan_repository.dart';
 
 class InsightsPage extends StatefulWidget {
   const InsightsPage({super.key});
@@ -18,9 +17,8 @@ class InsightsPage extends StatefulWidget {
 
 class _InsightsPageState extends State<InsightsPage> {
   final _profileRepository = ProfileRepository();
-  // TODO: Add cycle and daily log repositories when implementing monthly data fetching
-  // final _cycleRepository = CycleRepository();
-  // final _dailyLogRepository = DailyLogRepository();
+  final _dailyLogRepository = DailyLogRepository();
+  final _workoutPlanRepository = WorkoutPlanRepository();
 
   Profile? _profile;
   CyclePhase? _cyclePhase;
@@ -61,14 +59,22 @@ class _InsightsPageState extends State<InsightsPage> {
             )
           : null;
 
-      // Load recent symptoms from daily logs
-      // TODO: Implement method to fetch symptoms from last 30 days
-      // This would need a new repository method, for now using empty list
+      // Load recent symptoms from daily logs (last 30 days)
+      final monthlySymptoms = await _dailyLogRepository.getMonthlySymptoms();
+
+      // Load average daily steps (last 30 days)
+      final avgDailySteps = await _dailyLogRepository.getAverageDailySteps();
+
+      // Load average weekly workouts (last 30 days)
+      final avgWeeklyWorkouts = await _workoutPlanRepository.getAverageWeeklyWorkouts();
 
       setState(() {
         _profile = profile;
         _cyclePhase = cyclePhase ?? CyclePhase.root;
         _cycleDay = cycleDay;
+        _monthlySymptoms = monthlySymptoms;
+        _avgDailySteps = avgDailySteps;
+        _avgWeeklyWorkouts = avgWeeklyWorkouts;
         _isLoading = false;
       });
     } catch (e) {

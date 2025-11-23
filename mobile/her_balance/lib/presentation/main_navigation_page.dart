@@ -12,10 +12,23 @@ class MainNavigationPage extends StatefulWidget {
 
   @override
   State<MainNavigationPage> createState() => _MainNavigationPageState();
+
+  static final GlobalKey<_MainNavigationPageState> navigatorKey =
+      GlobalKey<_MainNavigationPageState>();
+
+  static void switchToTab(int index) {
+    navigatorKey.currentState?.switchToTab(index);
+  }
 }
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
   int _currentIndex = 0;
+
+  void switchToTab(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   final List<Widget> _pages = const [
     HomePage(),

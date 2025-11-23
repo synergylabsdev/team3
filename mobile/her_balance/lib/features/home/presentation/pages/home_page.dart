@@ -61,21 +61,29 @@ class _HomePageState extends State<HomePage> {
         return;
       }
 
+      // Check for active period first
+      final activeCycle = await _cycleRepository.getActiveCycle();
+      final hasActivePeriod = activeCycle != null;
+
       // Calculate cycle phase and day
       final cycleDay = CycleCalculator.calculateCycleDay(
         profile.lastPeriodStart,
         profile.avgCycleLength,
       );
-      final cyclePhase = cycleDay != null
-          ? CycleCalculator.calculatePhase(
-              profile.lastPeriodStart,
-              profile.avgCycleLength,
-            )
-          : null;
 
-      // Check for active period
-      final activeCycle = await _cycleRepository.getActiveCycle();
-      final hasActivePeriod = activeCycle != null;
+      CyclePhase? cyclePhase;
+      if (cycleDay != null) {
+        cyclePhase = CycleCalculator.calculatePhase(
+          profile.lastPeriodStart,
+          profile.avgCycleLength,
+        );
+
+        // If period just ended (no active period) and we're still in period days (1-7),
+        // force root phase to show the root color scheme
+        if (!hasActivePeriod && cycleDay <= 7) {
+          cyclePhase = CyclePhase.root;
+        }
+      }
 
       // Calculate nutrition from completed meals
       final today = DateTime.now();

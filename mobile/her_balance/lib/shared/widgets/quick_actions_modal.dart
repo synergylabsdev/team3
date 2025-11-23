@@ -2,20 +2,90 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/activity/presentation/pages/insights_page.dart';
+import '../../presentation/main_navigation_page.dart';
+import '../../features/nutrition/presentation/pages/meal_plan_page.dart';
+import '../../features/activity/presentation/widgets/log_steps_modal.dart';
+import '../../features/daily_logs/data/repositories/daily_log_repository.dart';
 
-class QuickActionsModal extends StatelessWidget {
+class QuickActionsModal extends StatefulWidget {
   const QuickActionsModal({super.key});
 
   @override
+  State<QuickActionsModal> createState() => _QuickActionsModalState();
+
+  static void show(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const QuickActionsModal(),
+    );
+  }
+}
+
+class _QuickActionsModalState extends State<QuickActionsModal> {
+  final _dailyLogRepository = DailyLogRepository();
+
+  Future<void> _logSteps(int steps) async {
+    try {
+      final today = DateTime.now();
+      final todayLog = await _dailyLogRepository.getTodayLog();
+      final currentSteps = todayLog?.stepCount ?? 0;
+      final newTotal = currentSteps + steps;
+
+      await _dailyLogRepository.upsertDailyLog(
+        logDate: today,
+        stepCount: newTotal,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$steps steps added successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error logging steps: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _showLogStepsModal() async {
+    final todayLog = await _dailyLogRepository.getTodayLog();
+    final currentSteps = todayLog?.stepCount ?? 0;
+
+    if (!mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => LogStepsModal(
+        currentSteps: currentSteps,
+        onConfirm: _logSteps,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final actions = [
+    final actions = <Map<String, dynamic>>[
       {
         'title': 'Log Meal',
         'description': 'Track what you ate today',
         'icon': Icons.restaurant,
         'color': AppTheme.primaryColor,
         'onTap': () {
-          // TODO: Navigate to log meal page
+          Navigator.of(context).pop();
+          MainNavigationPage.switchToTab(2);
         },
       },
       {
@@ -24,7 +94,15 @@ class QuickActionsModal extends StatelessWidget {
         'icon': Icons.calendar_today,
         'color': AppTheme.primaryColor,
         'onTap': () {
-          // TODO: Navigate to meal planning page
+          Navigator.of(context).pop();
+          MainNavigationPage.switchToTab(2);
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (context.mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MealPlanPage()),
+              );
+            }
+          });
         },
       },
       {
@@ -32,8 +110,9 @@ class QuickActionsModal extends StatelessWidget {
         'description': 'Record your daily activity',
         'icon': Icons.directions_walk,
         'color': const Color(0xFF4CAF50),
-        'onTap': () {
-          // TODO: Navigate to log steps page
+        'onTap': () async {
+          Navigator.of(context).pop();
+          await _showLogStepsModal();
         },
       },
       {
@@ -151,15 +230,6 @@ class QuickActionsModal extends StatelessWidget {
           SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
         ],
       ),
-    );
-  }
-
-  static void show(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const QuickActionsModal(),
     );
   }
 }

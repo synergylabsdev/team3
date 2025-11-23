@@ -113,4 +113,75 @@ class DailyLogRepository {
       totalFiber: totalFiber,
     );
   }
+
+  /// Get all unique symptoms logged in the last 30 days
+  Future<List<String>> getMonthlySymptoms() async {
+    final userId = SupabaseClient.auth.currentUser?.id;
+    if (userId == null) return [];
+
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    final startStr = thirtyDaysAgo.toIso8601String().split('T')[0];
+
+    try {
+      final response = await SupabaseClient.from('daily_logs')
+          .select('symptoms')
+          .eq('user_id', userId)
+          .gte('log_date', startStr)
+          .not('symptoms', 'is', null);
+
+      if (response.isEmpty) return [];
+
+      final allSymptoms = <String>{};
+      for (final item in response) {
+        final symptoms = item['symptoms'];
+        if (symptoms != null && symptoms is List) {
+          for (final symptom in symptoms) {
+            if (symptom is String) {
+              allSymptoms.add(symptom);
+            }
+          }
+        }
+      }
+
+      return allSymptoms.toList()..sort();
+    } catch (e) {
+      print('Error fetching monthly symptoms: $e');
+      return [];
+    }
+  }
+
+  /// Get average daily steps from the last 30 days
+  Future<int> getAverageDailySteps() async {
+    final userId = SupabaseClient.auth.currentUser?.id;
+    if (userId == null) return 0;
+
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    final startStr = thirtyDaysAgo.toIso8601String().split('T')[0];
+
+    try {
+      final response = await SupabaseClient.from('daily_logs')
+          .select('step_count')
+          .eq('user_id', userId)
+          .gte('log_date', startStr)
+          .not('step_count', 'is', null)
+          .gt('step_count', 0);
+
+      if (response.isEmpty) return 0;
+
+      int totalSteps = 0;
+      int count = 0;
+      for (final item in response) {
+        final stepCount = item['step_count'];
+        if (stepCount != null) {
+          totalSteps += (stepCount as num).toInt();
+          count++;
+        }
+      }
+
+      return count > 0 ? (totalSteps / count).round() : 0;
+    } catch (e) {
+      print('Error fetching average daily steps: $e');
+      return 0;
+    }
+  }
 }
