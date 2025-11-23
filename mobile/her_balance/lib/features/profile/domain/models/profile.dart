@@ -14,6 +14,7 @@ class Profile {
   final String measurementUnit;
   final bool showBibleVerses;
   final Map<String, dynamic> notificationPreferences;
+  final int dailyStepGoal;
 
   Profile({
     required this.id,
@@ -31,6 +32,7 @@ class Profile {
     required this.measurementUnit,
     required this.showBibleVerses,
     required this.notificationPreferences,
+    required this.dailyStepGoal,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -54,6 +56,7 @@ class Profile {
       notificationPreferences:
           json['notification_preferences'] as Map<String, dynamic>? ??
               {'phase_change': true, 'meal_reminders': true, 'log_reminders': true},
+      dailyStepGoal: json['daily_step_goal'] as int? ?? 10000,
     );
   }
 
@@ -74,6 +77,7 @@ class Profile {
       'measurement_unit': measurementUnit,
       'show_bible_verses': showBibleVerses,
       'notification_preferences': notificationPreferences,
+      'daily_step_goal': dailyStepGoal,
     };
   }
 }
