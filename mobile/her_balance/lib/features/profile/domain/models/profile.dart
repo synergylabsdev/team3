@@ -1,6 +1,7 @@
 class Profile {
   final String id;
   final String? email;
+  final String? name;
   final String role;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -19,6 +20,7 @@ class Profile {
   Profile({
     required this.id,
     this.email,
+    this.name,
     required this.role,
     required this.createdAt,
     required this.updatedAt,
@@ -39,6 +41,7 @@ class Profile {
     return Profile(
       id: json['id'] as String,
       email: json['email'] as String?,
+      name: json['name'] as String?,
       role: json['role'] as String? ?? 'user',
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
@@ -64,6 +67,7 @@ class Profile {
     return {
       'id': id,
       'email': email,
+      'name': name,
       'role': role,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),

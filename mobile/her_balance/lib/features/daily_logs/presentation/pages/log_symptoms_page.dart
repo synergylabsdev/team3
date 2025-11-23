@@ -27,6 +27,7 @@ class _LogSymptomsPageState extends State<LogSymptomsPage> {
   final Map<String, Set<String>> selectedSymptoms = {};
   final _dailyLogRepository = DailyLogRepository();
   final _profileRepository = ProfileRepository();
+  final _notesController = TextEditingController();
   bool _isLoading = false;
   CyclePhase? _currentPhase;
 
@@ -84,11 +85,35 @@ class _LogSymptomsPageState extends State<LogSymptomsPage> {
     'Other': Icons.water_drop_outlined,
   };
 
+  Color _getCategoryColor(String category) {
+    final cyclePhase = widget.cyclePhase ?? CyclePhase.root;
+    final phaseColor = cyclePhase.color;
+    
+    switch (category) {
+      case 'Physical':
+        return AppTheme.primaryColor; // Reddish-brown
+      case 'Energy':
+        return const Color(0xFFFAB177); // Orange-brown
+      case 'Mood':
+        return const Color(0xFFA1B69C); // Muted green
+      case 'Sleep':
+        return AppTheme.primaryColor; // Reddish-brown
+      default:
+        return phaseColor;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _initializeSymptoms();
     _loadCurrentPhase();
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
   }
 
   void _initializeSymptoms() {
@@ -282,6 +307,7 @@ class _LogSymptomsPageState extends State<LogSymptomsPage> {
                     children: categorySymptoms.map((symptom) {
                       final isSelected =
                           selectedSymptoms[category]!.contains(symptom);
+                      final categoryColor = _getCategoryColor(category);
                       return GestureDetector(
                         onTap: () => _toggleSymptom(category, symptom),
                         child: Container(
@@ -291,11 +317,11 @@ class _LogSymptomsPageState extends State<LogSymptomsPage> {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? phaseColor
+                                ? categoryColor
                                 : AppTheme.backgroundColor,
                             border: Border.all(
                               color: isSelected
-                                  ? phaseColor
+                                  ? categoryColor
                                   : Colors.grey[300]!,
                               width: 1,
                             ),
@@ -323,6 +349,38 @@ class _LogSymptomsPageState extends State<LogSymptomsPage> {
                 ],
               );
             }).toList(),
+            const SizedBox(height: 20),
+            // Additional Notes
+            Text(
+              'Additional Notes (Optional)',
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _notesController,
+              maxLines: 4,
+              decoration: InputDecoration(
+                hintText: 'Any other symptoms or observations...',
+                hintStyle: GoogleFonts.inter(
+                  color: const Color(0xFF9B9B9B),
+                ),
+                filled: true,
+                fillColor: AppTheme.backgroundColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.all(16),
+              ),
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: AppTheme.textPrimary,
+              ),
+            ),
             const SizedBox(height: 20),
           ],
         ),

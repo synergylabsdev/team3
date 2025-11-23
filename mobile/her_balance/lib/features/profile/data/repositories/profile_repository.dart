@@ -12,7 +12,7 @@ class ProfileRepository {
           .eq('id', userId)
           .single();
 
-      return Profile.fromJson(response as Map<String, dynamic>);
+      return Profile.fromJson(response);
     } catch (e) {
       print('Error fetching profile: $e');
       return null;
